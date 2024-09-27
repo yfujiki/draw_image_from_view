@@ -33,6 +33,7 @@ class CaptureWidgetExampleState extends State<CaptureWidgetExample> {
 
   Future<void> _capturePng() async {
     try {
+      // Obtain the image data from the RepaintBoundary
       RenderRepaintBoundary? boundary = _globalKey.currentContext
           ?.findRenderObject() as RenderRepaintBoundary;
       ui.Image? image = await boundary.toImage(pixelRatio: 4.0);
@@ -65,6 +66,8 @@ class CaptureWidgetExampleState extends State<CaptureWidgetExample> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Wrapping the widget with RepaintBoundary with a key is
+          // the key to capture the widget as an image
           RepaintBoundary(
             key: _globalKey,
             child: Container(
