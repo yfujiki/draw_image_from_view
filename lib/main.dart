@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(const MyApp());
 
@@ -46,12 +46,24 @@ class CaptureWidgetExampleState extends State<CaptureWidgetExample> {
         }
         return;
       }
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      File imgFile = File('$directory/screenshot.png');
-      imgFile.writeAsBytes(pngBytes);
 
-      if (kDebugMode) {
-        print('Screenshot saved to $directory/screenshot.png');
+      // Request storage permissions
+      var status = await Permission.photos.request();
+      if (status.isGranted) {
+        final result = await ImageGallerySaver.saveImage(pngBytes);
+        if (result['isSuccess']) {
+          if (kDebugMode) {
+            print('Screenshot saved to gallery');
+          }
+        } else {
+          if (kDebugMode) {
+            print('Failed to save screenshot');
+          }
+        }
+      } else {
+        if (kDebugMode) {
+          print('Storage permission denied');
+        }
       }
     } catch (e) {
       if (kDebugMode) {
