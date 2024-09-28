@@ -1,6 +1,8 @@
 # draw_image_from_view
 
-A new Flutter project.
+Saves the main widget into the photo gallery as an image.
+
+![Sample](./draw_view_as_image.gif)
 
 ## Getting Started
 
